@@ -241,6 +241,15 @@
       justify-content: center;
     }
     .marker-zeile input { height: 40px; font-size: 0.9rem; }
+    /* Bekannte Schäden aus der letzten Untersuchung: grau, nicht editierbar */
+    .skizze-marker.alt { background: #718096; cursor: default; }
+    .marker-nr.alt { background: #718096; }
+    .marker-alt-text {
+      flex: 1;
+      font-size: 0.9rem;
+      color: #4a5568;
+      padding: 0.4rem 0;
+    }
 
     /* ==== Fotos ==== */
     .foto-btn {
@@ -617,7 +626,11 @@
     const skizzeWrap = document.getElementById("skizzeWrap");
     const skizzeBild = document.getElementById("skizzeBild");
     const markerListe = document.getElementById("markerListe");
-    let marker = []; // { x, y (0..1), text }
+    // Schäden auf der Skizze: alte (aus letzter Untersuchung, grau, werden übernommen)
+    // + neue (diese Prüfung, rot). Nummerierung läuft durch: erst alt, dann neu.
+    let altMarker = []; // { x, y (0..1), text } – bereits bekannt
+    let neuMarker = []; // { x, y (0..1), text } – diese Untersuchung neu erfasst
+    function alleMarker() { return altMarker.concat(neuMarker); }
 
     KATEGORIEN.forEach((k) => {
       const opt = document.createElement("option");
@@ -626,8 +639,10 @@
       kategorieSel.appendChild(opt);
     });
 
-    kategorieSel.addEventListener("change", () => {
-      marker = [];
+    kategorieSel.addEventListener("change", zeigeSkizzeFuerKategorie);
+
+    function zeigeSkizzeFuerKategorie() {
+      neuMarker = []; // neue Marker zurücksetzen; bekannte (alt) bleiben erhalten
       const kat = KATEGORIEN.find((k) => k.label === kategorieSel.value);
       if (!kat) {
         skizzeGroup.style.display = "none";
@@ -638,7 +653,7 @@
       skizzeGroup.style.display = "block";
       skizzeWrap.classList.add("sichtbar");
       zeichneMarker();
-    });
+    }
 
     skizzeWrap.addEventListener("click", (e) => {
       if (e.target.classList.contains("skizze-marker")) return; // Marker-Klick = entfernen (unten)
@@ -646,45 +661,63 @@
       const x = (e.clientX - rect.left) / rect.width;
       const y = (e.clientY - rect.top) / rect.height;
       if (x < 0 || x > 1 || y < 0 || y > 1) return;
-      marker.push({ x, y, text: "" });
+      neuMarker.push({ x, y, text: "" });
       zeichneMarker();
     });
 
     function zeichneMarker() {
       skizzeWrap.querySelectorAll(".skizze-marker").forEach((m) => m.remove());
       markerListe.innerHTML = "";
-      marker.forEach((m, i) => {
+      const alle = alleMarker();
+      alle.forEach((m, i) => {
+        const alt = i < altMarker.length; // erste N = bekannte Schäden
+        const nr = i + 1;
+
         const punkt = document.createElement("div");
-        punkt.className = "skizze-marker";
+        punkt.className = "skizze-marker" + (alt ? " alt" : "");
         punkt.style.left = m.x * 100 + "%";
         punkt.style.top = m.y * 100 + "%";
-        punkt.textContent = i + 1;
-        punkt.addEventListener("click", (e) => {
-          e.stopPropagation();
-          marker.splice(i, 1);
-          zeichneMarker();
-        });
+        punkt.textContent = nr;
+        if (alt) {
+          punkt.title = "Bekannter Schaden aus letzter Untersuchung";
+        } else {
+          punkt.title = "Antippen zum Entfernen";
+          punkt.addEventListener("click", (e) => {
+            e.stopPropagation();
+            neuMarker.splice(i - altMarker.length, 1);
+            zeichneMarker();
+          });
+        }
         skizzeWrap.appendChild(punkt);
 
         const zeile = document.createElement("div");
         zeile.className = "marker-zeile";
-        const nr = document.createElement("span");
-        nr.className = "marker-nr";
-        nr.textContent = i + 1;
-        const inp = document.createElement("input");
-        inp.type = "text";
-        inp.placeholder = "Was ist hier beschädigt? (optional)";
-        inp.value = m.text;
-        inp.addEventListener("input", () => (m.text = inp.value));
-        zeile.appendChild(nr);
-        zeile.appendChild(inp);
+        const nrEl = document.createElement("span");
+        nrEl.className = "marker-nr" + (alt ? " alt" : "");
+        nrEl.textContent = nr;
+        zeile.appendChild(nrEl);
+
+        if (alt) {
+          const label = document.createElement("span");
+          label.className = "marker-alt-text";
+          label.textContent = (m.text && m.text.trim()) ? m.text : "(bekannter Schaden)";
+          zeile.appendChild(label);
+        } else {
+          const inp = document.createElement("input");
+          inp.type = "text";
+          inp.placeholder = "Was ist hier beschädigt? (optional)";
+          inp.value = m.text;
+          inp.addEventListener("input", () => (m.text = inp.value));
+          zeile.appendChild(inp);
+        }
         markerListe.appendChild(zeile);
       });
     }
 
     // Skizze + Marker als JPG rendern (für den Versand)
     function skizzeAlsBild() {
-      if (!marker.length || !skizzeBild.src || !skizzeBild.naturalWidth) return null;
+      const alle = alleMarker();
+      if (!alle.length || !skizzeBild.src || !skizzeBild.naturalWidth) return null;
       const w = skizzeBild.naturalWidth;
       const h = skizzeBild.naturalHeight;
       const canvas = document.createElement("canvas");
@@ -693,10 +726,11 @@
       const ctx = canvas.getContext("2d");
       ctx.drawImage(skizzeBild, 0, 0, w, h);
       const r = Math.max(12, Math.round(w * 0.018));
-      marker.forEach((m, i) => {
+      alle.forEach((m, i) => {
+        const alt = i < altMarker.length;
         ctx.beginPath();
         ctx.arc(m.x * w, m.y * h, r, 0, Math.PI * 2);
-        ctx.fillStyle = "#e53e3e";
+        ctx.fillStyle = alt ? "#718096" : "#e53e3e"; // grau = bekannt, rot = neu
         ctx.fill();
         ctx.lineWidth = Math.max(2, r * 0.15);
         ctx.strokeStyle = "#fff";
@@ -711,8 +745,8 @@
     }
 
     function markerAlsText() {
-      return marker
-        .map((m, i) => (i + 1) + ": " + (m.text.trim() || "(ohne Beschreibung)"))
+      return alleMarker()
+        .map((m, i) => (i + 1) + ": " + ((m.text || "").trim() || "(ohne Beschreibung)"))
         .join("; ");
     }
 
@@ -727,9 +761,33 @@
       return prefix + "-VM " + nummer;
     }
 
+    // Bekannte Schäden der letzten Untersuchung in die Skizze übernehmen (grau)
+    function uebernehmeBekannteSchaeden(u) {
+      altMarker = [];
+      if (u && u.skizze) {
+        try {
+          const arr = JSON.parse(u.skizze);
+          if (Array.isArray(arr)) {
+            altMarker = arr
+              .filter((m) => m && typeof m.x === "number" && typeof m.y === "number")
+              .map((m) => ({ x: m.x, y: m.y, text: m.text || "" }));
+          }
+        } catch (e) { /* ungültiges JSON ignorieren */ }
+      }
+      // Passende Skizze automatisch anzeigen, damit die Schäden direkt sichtbar sind
+      if (u && u.kategorie && kategorieSel.value !== u.kategorie &&
+          KATEGORIEN.some((k) => k.label === u.kategorie)) {
+        kategorieSel.value = u.kategorie;
+        zeigeSkizzeFuerKategorie(); // setzt neuMarker zurück und zeigt die Skizze
+      }
+      zeichneMarker();
+    }
+
     async function ladeAbgleich() {
       const fzg = aktuellesFahrzeug();
       letzterKontrollKm = null;
+      altMarker = [];
+      zeichneMarker();
       if (!fzg) { abgleichBox.classList.remove("sichtbar"); return; }
       if (APPS_SCRIPT_URL.startsWith("HIER_DEINE")) {
         abgleichBox.innerHTML = "<strong>ℹ️ Abgleich</strong>Demo-Modus: Backend noch nicht verbunden.";
@@ -765,6 +823,10 @@
         if (info.untersuchung) {
           const u = info.untersuchung;
           html += "<br>Letzte interne Untersuchung: <b>" + (u.datum || "—") + "</b> – " + (u.ergebnis || "—");
+          uebernehmeBekannteSchaeden(u);
+          if (altMarker.length) {
+            html += '<br><span class="warn">🩹 ' + altMarker.length + " bekannte(r) Schaden/Schäden aus der letzten Untersuchung – grau in die Skizze übernommen. Neue Schäden rot dazu antippen.</span>";
+          }
         } else {
           html += "<br>Noch keine interne Untersuchung erfasst – dies ist die erste.";
         }
@@ -878,6 +940,7 @@
         fahrzeug:             aktuellesFahrzeug(),
         kategorie:            kategorieSel.value,
         schadenMarkierungen:  markerAlsText(),
+        skizzeDaten:          JSON.stringify(alleMarker().map((m) => ({ x: m.x, y: m.y, text: (m.text || "").trim() }))),
         fotoSkizze:           skizzeAlsBild(),
         datum:                document.getElementById("datum").value,
         kilometerstand:       document.getElementById("kilometerstand").value,
@@ -955,7 +1018,8 @@
       abgleichBox.classList.remove("sichtbar");
       letzterKontrollKm = null;
 
-      marker = [];
+      altMarker = [];
+      neuMarker = [];
       skizzeGroup.style.display = "none";
       skizzeWrap.classList.remove("sichtbar");
       skizzeBild.src = "";
