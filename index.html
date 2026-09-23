@@ -315,6 +315,31 @@
     .status.success { background: #c6f6d5; color: #276749; display: block; }
     .status.error   { background: #fed7d7; color: #9b2c2c; display: block; }
     .status.info    { background: #bee3f8; color: #2a4365; display: block; }
+
+    .feld-fehlt { border: 2px solid #e53e3e !important; background: #fff5f5 !important; }
+
+    /* Sende-Overlay: blockiert die Seite, solange gespeichert wird */
+    .sende-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(26, 32, 44, 0.72);
+      display: none; align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    .sende-overlay.aktiv { display: flex; }
+    .sende-box {
+      background: #fff; border-radius: 14px; padding: 1.75rem 1.5rem;
+      max-width: 340px; width: 100%; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .sende-box .spinner {
+      width: 46px; height: 46px; margin: 0 auto 1rem;
+      border: 5px solid #e2e8f0; border-top-color: #2b6cb0; border-radius: 50%;
+      animation: drehen 0.9s linear infinite;
+    }
+    @keyframes drehen { to { transform: rotate(360deg); } }
+    .sende-box h3 { margin: 0 0 0.4rem; font-size: 1.1rem; color: #1a202c; }
+    .sende-box p  { margin: 0; font-size: 0.9rem; color: #4a5568; }
+    .sende-box .sekunden { margin-top: 0.75rem; font-size: 0.8rem; color: #718096; }
   </style>
 </head>
 <body>
@@ -325,7 +350,7 @@
       <p>TÜV-Vorcheck durch die Disposition</p>
     </div>
 
-    <form id="untersuchungForm">
+    <form id="untersuchungForm" novalidate>
 
       <div class="abschnitt">Allgemein</div>
 
@@ -476,6 +501,15 @@
       <button type="submit" id="submitBtn">Untersuchung absenden</button>
       <div class="status" id="status"></div>
     </form>
+  </div>
+
+  <div class="sende-overlay" id="sendeOverlay" role="alertdialog" aria-live="assertive">
+    <div class="sende-box">
+      <div class="spinner"></div>
+      <h3>Wird gespeichert …</h3>
+      <p>Bitte warten und die App nicht schließen.<br>Das kann bis zu 30 Sekunden dauern.</p>
+      <div class="sekunden" id="sendeSekunden"></div>
+    </div>
   </div>
 
   <script>
@@ -907,12 +941,68 @@
     fotoEinrichten("gesamt", "fotoGesamt", "btnGesamt", "previewGesamt");
 
     // ====== ABSENDEN ======
+    const SENDE_TIMEOUT_MS = 90000; // nach 90 s ohne Antwort abbrechen
+    let sendeLaeuft = false;
+    let uebermittlungsId = null;
+    let sendeUhr = null;
+
+    document.getElementById("untersuchungForm").addEventListener("input", (e) => {
+      if (e.target.classList) e.target.classList.remove("feld-fehlt");
+    });
+    document.getElementById("untersuchungForm").addEventListener("change", (e) => {
+      if (e.target.classList) e.target.classList.remove("feld-fehlt");
+    });
+
+    function overlayZeigen(an) {
+      const ov = document.getElementById("sendeOverlay");
+      const sek = document.getElementById("sendeSekunden");
+      clearInterval(sendeUhr);
+      if (an) {
+        const start = Date.now();
+        sek.textContent = "";
+        sendeUhr = setInterval(() => {
+          sek.textContent = Math.round((Date.now() - start) / 1000) + " s";
+        }, 1000);
+        ov.classList.add("aktiv");
+      } else {
+        ov.classList.remove("aktiv");
+      }
+    }
+
     document.getElementById("untersuchungForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const btn = document.getElementById("submitBtn");
       const status = document.getElementById("status");
       status.className = "status";
       status.textContent = "";
+
+      // Eigene Pflichtfeld-Prüfung: iPhone/Safari zeigt fehlende Felder sonst oft
+      // gar nicht an – dann passiert beim Tippen auf "Absenden" scheinbar nichts.
+      const form = e.target;
+      form.querySelectorAll(".feld-fehlt").forEach((el) => el.classList.remove("feld-fehlt"));
+      const fehlend = [...form.elements].filter((el) => el.willValidate && !el.checkValidity());
+      if (fehlend.length) {
+        const namen = [];
+        fehlend.forEach((el) => {
+          el.classList.add("feld-fehlt");
+          let name = "";
+          const m = /^pruef-(\d+)$/.exec(el.id || "");
+          if (m) name = PRUEFPUNKTE[+m[1]];
+          else if ((el.id || "").startsWith("fahrzeug")) name = "Fahrzeug";
+          else {
+            const lab = form.querySelector('label[for="' + el.id + '"]');
+            name = lab ? lab.textContent.trim() : (el.placeholder || el.id);
+          }
+          if (el.validity && (el.validity.rangeUnderflow || el.validity.rangeOverflow || el.validity.stepMismatch || el.validity.badInput)) {
+            name += " (ungültiger Wert)";
+          }
+          if (name && !namen.includes(name)) namen.push(name);
+        });
+        status.className = "status error";
+        status.textContent = "Bitte noch ausfüllen: " + namen.join(", ");
+        fehlend[0].scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
 
       if (gibtEsMaengel() && !maengelText.value.trim()) {
         status.className = "status error";
@@ -926,8 +1016,15 @@
         return;
       }
 
+      if (sendeLaeuft) return; // Doppeltes Absenden verhindern
+      sendeLaeuft = true;
       btn.disabled = true;
       btn.textContent = "Wird gesendet…";
+      // Eine ID pro Untersuchung: wird bei "nochmal senden" wiederverwendet,
+      // das Backend erkennt sie und legt keinen doppelten Eintrag an.
+      if (!uebermittlungsId) {
+        uebermittlungsId = Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
+      }
 
       const pruefwerte = {};
       PRUEFPUNKTE.forEach((punkt, i) => {
@@ -936,6 +1033,7 @@
 
       const data = {
         typ:                  "untersuchung",
+        uebermittlungsId:     uebermittlungsId,
         name:                 document.getElementById("name").value,
         fahrzeug:             aktuellesFahrzeug(),
         kategorie:            kategorieSel.value,
@@ -965,30 +1063,46 @@
         console.log("DEMO – diese Daten würden gesendet:", data);
         status.className = "status info";
         status.textContent = "Demo-Modus: Backend noch nicht verbunden. Daten siehe Konsole.";
+        sendeLaeuft = false;
         btn.disabled = false;
         btn.textContent = "Untersuchung absenden";
         return;
       }
 
+      overlayZeigen(true);
+      const abbruch = new AbortController();
+      const timer = setTimeout(() => abbruch.abort(), SENDE_TIMEOUT_MS);
+
       try {
         // Ohne eigenen Content-Type-Header -> "simple request", keine CORS-Preflight
         const res = await fetch(APPS_SCRIPT_URL, {
           method: "POST",
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
+          signal: abbruch.signal
         });
         const result = await res.json();
         if (result.status !== "ok") throw new Error(result.message || "Serverfehler");
 
         status.className = "status success";
-        status.textContent = "Interne Untersuchung erfolgreich gespeichert!";
+        status.textContent = result.doppelt
+          ? "Diese Untersuchung war bereits gespeichert – kein doppelter Eintrag."
+          : "Interne Untersuchung erfolgreich gespeichert!";
+        uebermittlungsId = null;
         formularZuruecksetzen();
       } catch (err) {
         status.className = "status error";
-        status.textContent = "Fehler beim Senden. Bitte erneut versuchen.";
+        status.textContent = (err && err.name === "AbortError")
+          ? "Keine Antwort vom Server (Netz langsam?). Bitte einfach nochmal auf „Absenden“ tippen – doppelte Einträge werden automatisch verhindert."
+          : "Fehler beim Senden. Bitte nochmal auf „Absenden“ tippen – doppelte Einträge werden automatisch verhindert.";
+      } finally {
+        clearTimeout(timer);
+        overlayZeigen(false);
+        sendeLaeuft = false;
       }
 
       btn.disabled = false;
       btn.textContent = "Untersuchung absenden";
+      status.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
     function formularZuruecksetzen() {
