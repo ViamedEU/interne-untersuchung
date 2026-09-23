@@ -507,7 +507,7 @@
     <div class="sende-box">
       <div class="spinner"></div>
       <h3>Wird gespeichert …</h3>
-      <p>Bitte warten und die App nicht schließen.<br>Das kann bis zu 30 Sekunden dauern.</p>
+      <p>Bitte warten und die App nicht schließen.<br>Bei schlechtem Netz kann das bis zu 1 Minute dauern.</p>
       <div class="sekunden" id="sendeSekunden"></div>
     </div>
   </div>
@@ -566,8 +566,8 @@
     };
 
     // Maße/Qualität für die Foto-Komprimierung
-    const FOTO_MAX_KANTE = 1600;
-    const FOTO_QUALITAET = 0.7;
+    const FOTO_MAX_KANTE = 1280;
+    const FOTO_QUALITAET = 0.6;
 
     // Nächste Untersuchung: Vorschlag in Monaten
     const INTERVALL_MONATE = 3;
@@ -775,7 +775,7 @@
         ctx.textBaseline = "middle";
         ctx.fillText(String(i + 1), m.x * w, m.y * h);
       });
-      return canvas.toDataURL("image/jpeg", 0.8);
+      return canvas.toDataURL("image/jpeg", 0.7);
     }
 
     function markerAlsText() {
