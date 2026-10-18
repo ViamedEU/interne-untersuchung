@@ -278,6 +278,10 @@ select#ergebnis.e-rot { border-color: var(--rot); background-color: var(--rot-he
     .filter button.an { background: var(--akzent-hell); color: var(--akzent-text); }
     .gruppe { padding: 0.55rem 1rem 0.35rem; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--leise); border-top: 1px solid var(--linie); background: #fafcfb; }
     .gruppe.s3 { color: var(--rot); } .gruppe.s2 { color: var(--gelb); }
+    .gruppe.typ { display: flex; align-items: center; gap: 0.45rem; color: var(--tinte); font-size: 0.78rem; }
+    .gruppe.typ i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+    .gruppe.typ small { margin-left: auto; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--leise); }
+    .gruppe.typ small b { color: var(--rot); }
 
     .zeile { display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; gap: 0.75rem; align-items: center; padding: 0.7rem 1rem; border-top: 1px solid var(--linie); cursor: pointer; }
     .zeile:hover, .zeile.an { background: var(--akzent-hell); }
@@ -1245,11 +1249,21 @@ var FP = (function () {
       $("stand").textContent = "Stand " + new Date(dash.stand).toLocaleString("de-DE");
     }
 
+    // Fahrzeugliste nach Typ gruppiert (LMW, BTW, TSW, Busse), je Gruppe der Nummer nach; Dringendes zeigt die Ampel und der Reiter Hinweise
+    const TYP_GRUPPEN = [["LMW", "LMW"], ["BTW", "BTW"], ["TSW", "TSW"], ["BUS", "Busse"], ["VERLIEHEN", "Verliehen"], ["SONSTIGE", "Sonstige / nicht in der Fahrzeugliste"]];
+    function typGruppe(fz) { return fz.f.unbekannt ? "SONSTIGE" : fz.f.verliehen ? "VERLIEHEN" : (KAT_FARBE[katVon(fz.f)] ? katVon(fz.f) : "SONSTIGE"); }
     function linksFahrzeuge() {
-      const l = sichtbar().sort((a, b) => (b.rot * 100 + b.gelb) - (a.rot * 100 + a.gelb) || sortName(a, b));
-      $("links").innerHTML = '<div class="liste-kopf"><h2>Fahrzeuge<small>' + l.length + " · dringende zuerst</small></h2>" +
+      const l = sichtbar();
+      const html = TYP_GRUPPEN.map(([k, titel]) => {
+        const g = l.filter((fz) => typGruppe(fz) === k).sort(sortName);
+        if (!g.length) return "";
+        const rot = g.filter((fz) => fz.rot).length, gelb = g.filter((fz) => !fz.rot && fz.gelb).length;
+        return '<div class="gruppe typ"><i style="background:' + (KAT_FARBE[k] || "#94a3b8") + '"></i>' + FP.esc(titel) + " · " + g.length +
+          "<small>" + (rot ? "<b>" + rot + " dringend</b>" : "") + (rot && gelb ? " · " : "") + (gelb ? gelb + " bald" : "") + (!rot && !gelb ? "alles ok" : "") + "</small></div>" + g.map(fzZeile).join("");
+      }).join("");
+      $("links").innerHTML = '<div class="liste-kopf"><h2>Fahrzeuge<small>' + l.length + " · nach Typ</small></h2>" +
         '<div class="filter"><button type="button" data-f="alle"' + (filter === "alle" ? ' class="an"' : "") + '>Alle</button><button type="button" data-f="zutun"' + (filter === "zutun" ? ' class="an"' : "") + ">Mit Handlungsbedarf</button></div></div>" +
-        (l.length ? l.map(fzZeile).join("") : '<div class="leer">Kein Fahrzeug gefunden.</div>');
+        (l.length ? html : '<div class="leer">Kein Fahrzeug gefunden.</div>');
       $("links").querySelectorAll("[data-f]").forEach((b) => b.addEventListener("click", () => { filter = b.dataset.f; zeichne(); }));
       bindeKlicks();
     }
