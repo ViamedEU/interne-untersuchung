@@ -1225,8 +1225,8 @@ var FP = (function () {
         (fz.offen ? '<span class="pill orange">' + fz.offen + (fz.offen === 1 ? " Schaden" : " Schäden") + "</span>" : "") +
         (lk ? '<span class="pill' + (lk.datum === heute() ? " gruen" : "") + '">Kontrolle ' + (lk.datum === heute() ? "heute" : kurz(lk.datum)) + "</span>" : "") +
         (f.verliehen ? '<span class="pill">verliehen</span>' : "") + (f.unbekannt ? '<span class="pill gelb">nicht in der Fahrzeugliste</span>' : "");
-      const ampel = f.verliehen ? '<span class="ampel aus">–</span><small>verliehen</small>' : fz.rot ? '<span class="ampel s3">' + fz.rot + "</span><small>dringend</small>" :
-        fz.gelb ? '<span class="ampel s2">' + fz.gelb + "</span><small>bald</small>" : '<span class="ampel s0">✓</span><small>alles ok</small>';
+      const ampel = fz.rot ? '<span class="ampel s3">' + fz.rot + "</span><small>dringend</small>" : fz.gelb ? '<span class="ampel s2">' + fz.gelb + "</span><small>bald</small>" :
+        f.verliehen ? '<span class="ampel aus">–</span><small>verliehen</small>' : '<span class="ampel s0">✓</span><small>alles ok</small>';
       return '<div class="zeile' + (gewaehlt === fz ? " an" : "") + (f.verliehen ? " verliehen" : "") + '" data-key="' + FP.esc(fz.key) + '">' + fzAva(f) +
         '<div><div class="name">' + FP.esc(f.kennzeichen) + (f.name ? " <span>· " + FP.esc(f.name) + (f.modell ? " · " + FP.esc(f.modell) : "") + "</span>" : "") + '</div><div class="meta">' + pills + "</div></div>" +
         '<div class="ampel-box">' + ampel + "</div></div>";
