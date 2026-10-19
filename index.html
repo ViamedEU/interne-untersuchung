@@ -350,6 +350,80 @@ select#ergebnis.e-rot { border-color: var(--rot); background-color: var(--rot-he
     .leer { padding: 2rem 1rem; text-align: center; color: var(--leise); font-size: 0.9rem; }
     .leer-klein { padding: 0 1rem 0.9rem; color: var(--leise); font-size: 0.86rem; }
 
+    /* Termine (Werkstatt, TÜV, Service): eigene Farbe Blau = eingeplant */
+    :root { --termin: #2563eb; --termin-2: #60a5fa; --termin-hell: #eef4ff; --termin-text: #1d4ed8; }
+    .btn.termin { color: #fff; background: linear-gradient(135deg, var(--termin), var(--termin-2)); box-shadow: 0 6px 14px rgba(37,99,235,0.18); }
+    .btn.termin-hell { background: var(--termin-hell); color: var(--termin-text); }
+    .termine-karte { padding: 0; margin: 0 0 1rem; overflow: hidden; border-radius: 22px; }
+    .termine-kopf { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.8rem 1rem 0.7rem; }
+    .termine-kopf h2 { display: flex; align-items: center; gap: 0.55rem; font-size: 0.98rem; color: var(--tinte); }
+    .termine-kopf h2 .ico { width: 34px; height: 34px; border-radius: 11px; display: grid; place-items: center; font-size: 1rem; background: linear-gradient(135deg, var(--termin), var(--termin-2)); }
+    .termine-kopf h2 small { color: var(--leise); font-weight: 600; font-size: 0.78rem; }
+    .termine-kopf .rechts { margin-left: auto; display: flex; gap: 0.45rem; align-items: center; flex-wrap: wrap; }
+    .termine-kopf .pill { cursor: pointer; border: none; font-size: 0.76rem; padding: 0.35rem 0.7rem; }
+    .tage { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--linie); }
+    .tagspalte { padding: 0.6rem 0.7rem 0.8rem; border-left: 1px solid var(--linie); min-width: 0; }
+    .tagspalte:first-child { border-left: none; }
+    .tagspalte.heute { background: linear-gradient(180deg, var(--termin-hell), #fff 70%); }
+    .tag-kopf { display: flex; align-items: baseline; gap: 0.4rem; font-weight: 800; color: var(--tinte); font-size: 0.88rem; }
+    .tag-kopf small { color: var(--leise); font-weight: 700; font-size: 0.74rem; }
+    .tag-kopf .zahl { margin-left: auto; background: var(--termin); align-self: center; }
+    .tagspalte.heute .tag-kopf { color: var(--termin-text); }
+    .tag-leer { color: #a3b1a8; font-size: 0.8rem; font-weight: 600; padding: 0.55rem 0 0.1rem; }
+    .t-karte { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 0.55rem; align-items: center; background: var(--termin-hell); border-radius: 14px; padding: 0.5rem 0.6rem; margin-top: 0.45rem; cursor: pointer; border: 2px solid transparent; }
+    .t-karte:hover, .t-karte.an { border-color: var(--termin-2); }
+    .t-karte.vorschlag { background: #fff; border: 2px dashed #93c5fd; }
+    .t-karte .fz-ava { width: 38px; height: 38px; border-radius: 11px; font-size: 0.5rem; } .t-karte .fz-ava b { font-size: 0.86rem; }
+    .t-zeit { font-weight: 900; color: var(--termin-text); font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .t-zeit span { color: var(--tinte); font-weight: 800; }
+    .t-was { font-weight: 700; color: var(--text); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .t-wo { color: var(--leise); font-size: 0.76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .art-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; vertical-align: 1px; }
+    .pill.termin { background: var(--termin-hell); color: var(--termin-text); } .pill.vorbei { background: var(--orange-hell); color: var(--orange); }
+    .ampel.geplant { background: linear-gradient(135deg, var(--termin), var(--termin-2)); font-size: 0.95rem; }
+    .gruppe.typ small i.geplant { font-style: normal; color: var(--termin-text); }
+    /* Hinweis mit Termin: bleibt in seiner Gruppe, aber blau markiert */
+    .hinweis.geplant { box-shadow: inset 4px 0 0 var(--termin); }
+    .hinweis .i { position: relative; }
+    .hinweis.geplant .i::after { content: "📅"; position: absolute; right: -8px; bottom: -8px; font-size: 0.72rem; line-height: 1; background: #fff; border-radius: 7px; padding: 2px; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+    .t-status { display: flex; align-items: center; gap: 0.45rem; flex-wrap: wrap; margin-top: 0.4rem; padding: 0.4rem 0.6rem; border-radius: 11px; background: var(--termin-hell); color: var(--termin-text); font-size: 0.81rem; font-weight: 700; line-height: 1.35; }
+    .t-status .chip-t { background: var(--termin); color: #fff; border-radius: 999px; padding: 0.08rem 0.55rem; font-size: 0.7rem; font-weight: 800; white-space: nowrap; }
+    .t-status .leise { color: var(--leise); font-weight: 600; }
+    .t-status.vorschlag { background: #fff; border: 1.5px dashed #93c5fd; }
+    .t-status.vorbei { background: var(--orange-hell); color: var(--orange); } .t-status.vorbei .chip-t { background: var(--orange); }
+    .t-status.erledigt { background: var(--akzent-hell); color: var(--akzent-text); } .t-status.erledigt .chip-t { background: var(--akzent); }
+    /* Termine im Fahrzeug */
+    .termin-liste { display: grid; gap: 0.5rem; padding: 0 1rem 0.9rem; }
+    .termin-zeile { display: grid; grid-template-columns: 62px minmax(0, 1fr) auto; gap: 0.75rem; align-items: center; background: var(--termin-hell); border-radius: 16px; padding: 0.6rem 0.7rem; }
+    .termin-zeile.vorbei { background: var(--orange-hell); } .termin-zeile.vorschlag { background: #fff; border: 2px dashed #93c5fd; }
+    .datum-block { text-align: center; background: #fff; border-radius: 12px; padding: 0.3rem 0.1rem; box-shadow: 0 2px 8px rgba(37,99,235,0.12); }
+    .datum-block small { display: block; font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; color: var(--termin-text); }
+    .termin-zeile.vorbei .datum-block small { color: var(--orange); }
+    .datum-block strong { display: block; font-size: 1.08rem; font-weight: 900; color: var(--tinte); line-height: 1.15; }
+    .datum-block span { display: block; font-size: 0.72rem; color: var(--leise); font-weight: 800; }
+    .termin-zeile .was { font-weight: 800; color: var(--tinte); }
+    .termin-zeile .wo { font-size: 0.85rem; color: var(--text); }
+    .termin-zeile .meta-text { color: var(--leise); font-size: 0.76rem; }
+    .termin-zeile .btn-row { margin-top: 0; justify-content: flex-end; }
+    @media (max-width: 640px) { .termin-zeile { grid-template-columns: 58px minmax(0, 1fr); } .termin-zeile .btn-row { grid-column: 1 / -1; justify-content: flex-start; } }
+    /* Termin-Formular (im Menü) */
+    .menue.termin-menue { max-width: 520px; max-height: calc(100vh - 2rem); overflow-y: auto; }
+    .menue .feld-label { display: block; font-size: 0.74rem; font-weight: 800; color: var(--leise); text-transform: uppercase; letter-spacing: 0.04em; margin: 0.15rem 0 0.35rem; }
+    .menue .feld-label span { text-transform: none; letter-spacing: 0; font-weight: 600; }
+    .art-wahl { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.4rem; margin-bottom: 0.75rem; }
+    .art-wahl button { min-height: 50px; border-radius: 13px; border: 2px solid transparent; background: var(--feld); font-weight: 800; font-size: 0.88rem; color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.2rem; padding: 0 0.5rem; }
+    .art-wahl button.an { background: var(--termin-hell); border-color: var(--termin); color: var(--termin-text); }
+    .schnell { display: flex; gap: 0.35rem; flex-wrap: wrap; margin: -0.2rem 0 0.75rem; }
+    .schnell button { border: none; border-radius: 999px; padding: 0.4rem 0.8rem; font-weight: 800; font-size: 0.8rem; background: var(--feld); color: var(--leise); cursor: pointer; }
+    .schnell button.an { background: var(--termin-hell); color: var(--termin-text); }
+    .menue .row { gap: 0.6rem; }
+    .menue .btn.termin { min-height: 60px; font-size: 1.08rem; }
+    .fuer-box { background: var(--termin-hell); color: var(--termin-text); border-radius: 12px; padding: 0.55rem 0.75rem; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.4; }
+    .fuer-box.vorschlag { background: #fff; border: 1.5px dashed #93c5fd; }
+    .t-fehler { color: var(--rot); font-weight: 700; font-size: 0.86rem; min-height: 1.1em; margin: -0.2rem 0 0.5rem; }
+    @media (max-width: 820px) { .tage { grid-template-columns: 1fr 1fr; } .tagspalte:nth-child(3) { border-left: none; } .tagspalte:nth-child(n+3) { border-top: 1px solid var(--linie); } }
+    @media (max-width: 560px) { .tage { grid-template-columns: 1fr; } .tagspalte { border-left: none; border-top: 1px solid var(--linie); } .tagspalte:first-child { border-top: none; } .tag-leer { padding-top: 0.25rem; } }
+
     /* Untersuchung (Formular) */
     .formular { max-width: 760px; margin: 0 auto; }
     .formular .senden-leiste { margin: 0; border-radius: 20px 20px 0 0; }
@@ -424,6 +498,8 @@ select#ergebnis.e-rot { border-color: var(--rot); background-color: var(--rot-he
       </div>
       <input class="suche" id="suche" type="search" placeholder="Fahrzeug suchen (Kennzeichen, Name, Modell) …" />
     </div>
+
+    <section class="karte termine-karte" id="termine" hidden></section>
 
     <div class="raster" id="raster">
       <section class="karte" id="links"><div class="leer">Wird geladen …</div></section>
@@ -720,9 +796,88 @@ function fpKategorieLabel(kategorie) {
   return "";
 }
 
+// ====== TERMINE (Werkstatt, TÜV, Service …) ======
+// Gespeichert im Tab "Termine" (Backend-Aktion "termin"); die Dispo-App hängt sie an die passenden Hinweise.
+var FP_TERMIN_ARTEN = ["Inspektion/Service", "TÜV/HU", "Werkstatt", "Reifen", "Sonstiges"];
+// Ein Termin ohne festen Bezug deckt diese Hinweise ab (nach seiner Art)
+var FP_TERMIN_DECKT = { "Inspektion/Service": ["service"], "TÜV/HU": ["tuev"], "Werkstatt": ["maengel", "warn"], "Reifen": [], "Sonstiges": [] };
+// Hinweis -> vorgeschlagene Art im Termin-Formular
+var FP_TERMIN_ART_FUER = { service: "Inspektion/Service", tuev: "TÜV/HU", maengel: "Werkstatt", warn: "Werkstatt", untersuchung: "Sonstiges", termin: "" };
+
+// Art aus einem Freitext raten ("20.10.26 Inspektion VW" -> "Inspektion/Service")
+function fpTerminArt(text) {
+  var t = String(text || "").toLowerCase();
+  if (/t[üu]e?v|(^|[^a-zäöü])hu([^a-zäöü]|$)|hauptuntersuchung/.test(t)) return "TÜV/HU";
+  if (/inspektion|servic|wartung|[öo]e?lwechsel/.test(t)) return "Inspektion/Service";
+  if (/reifen/.test(t)) return "Reifen";
+  if (/werkstatt|reparatur|scheibe|bremse|karosserie|lack|delle/.test(t)) return "Werkstatt";
+  return "Sonstiges";
+}
+
+// Gehört der Termin zu diesem Hinweis? Fester Bezug (beim Eintragen am Hinweis) oder über die Art.
+function fpTerminPasst(termin, hinweisArt) {
+  if (!termin || !hinweisArt) return false;
+  if (termin.bezug) return termin.bezug === hinweisArt;
+  return (FP_TERMIN_DECKT[termin.art] || []).indexOf(hinweisArt) !== -1;
+}
+
+// "2026-10-19" + 3 -> "2026-10-22" (ohne Zeitzonen-Effekte)
+function fpIsoPlusTage(iso, tage) {
+  var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || ""));
+  if (!m) return "";
+  var d = new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]) + (Number(tage) || 0)));
+  return d.getUTCFullYear() + "-" + ("0" + (d.getUTCMonth() + 1)).slice(-2) + "-" + ("0" + d.getUTCDate()).slice(-2);
+}
+
+// Sortierung: Datum, dann Uhrzeit (ohne Uhrzeit zuerst = ganztägig)
+function fpTerminSort(a, b) {
+  return String(a.datum || "").localeCompare(String(b.datum || "")) || String(a.uhrzeit || "").localeCompare(String(b.uhrzeit || ""));
+}
+
+// Geplante Termine von heute bis heute + tage, sortiert
+function fpTermineImFenster(termine, heuteIso, tage) {
+  var bis = fpIsoPlusTage(heuteIso, tage);
+  return (termine || []).filter(function (t) {
+    return t && String(t.status || "geplant").toLowerCase() === "geplant" && t.datum >= heuteIso && t.datum <= bis;
+  }).sort(fpTerminSort);
+}
+
+// Termine aus Freitext im Fuhrpark-Tab erkennen ("20.10.26 Inspektion VW", "Inspektion VW 20.10.", "Termin bei VW 22.10.2026 07:30 Uhr").
+// Nur Datum mit zwei Punkten (sonst wären "2.5 mm" Termine), nur heute bis 1 Jahr voraus, nichts mit "gehabt/erledigt".
+// Rückgabe: [{ datum "yyyy-mm-dd", uhrzeit "HH:MM" | "", art, ort, text }]
+function fpTermineAusText(text, heuteIso) {
+  var s = String(text == null ? "" : text).trim();
+  var out = [];
+  if (!s || !/^\d{4}-\d{2}-\d{2}/.test(String(heuteIso || "")) || /gehabt|erledigt|gewechselt|war am/i.test(s)) return out;
+  var jahrHeute = Number(heuteIso.slice(0, 4)), bis = fpIsoPlusTage(heuteIso, 366), vor30 = fpIsoPlusTage(heuteIso, -30);
+  var re = /(^|[^\d.])(\d{1,2})\.(\d{1,2})\.(\d{4}|\d{2})?(?!\d)/g, m;
+  var ohneDatum = s;
+  while ((m = re.exec(s)) !== null) {
+    var tag = Number(m[2]), monat = Number(m[3]), jahr = m[4] ? Number(m[4].length === 2 ? "20" + m[4] : m[4]) : jahrHeute;
+    ohneDatum = ohneDatum.replace(m[0].slice(m[1].length), " ");
+    if (monat < 1 || monat > 12 || tag < 1 || tag > 31) continue;
+    var iso = jahr + "-" + ("0" + monat).slice(-2) + "-" + ("0" + tag).slice(-2);
+    if (fpIsoPlusTage(iso, 0) !== iso) continue;                       // 31.02. o. ä.
+    if (!m[4] && iso < vor30) iso = (jahr + 1) + iso.slice(4);           // "05.01." im Dezember = nächstes Jahr
+    if (iso < heuteIso || iso > bis) continue;
+    out.push({ datum: iso, uhrzeit: "", art: fpTerminArt(s), ort: "", text: s });
+  }
+  if (!out.length) return out;
+  var u = /(\d{1,2})[:.](\d{2})\s*uhr|(\d{1,2}):(\d{2})|(\d{1,2})\s*uhr/i.exec(ohneDatum), uhr = "";
+  if (u) {
+    var std = Number(u[1] || u[3] || u[5]), min = Number(u[2] || u[4] || 0);
+    if (std < 24 && min < 60) uhr = ("0" + std).slice(-2) + ":" + ("0" + min).slice(-2);
+  }
+  var bei = /\bbei\s+([A-Za-zÄÖÜäöüß][^,;—–\d]*)/i.exec(ohneDatum);
+  var ort = bei ? bei[1].replace(/\s*uhr\s*$/i, "").trim() : "";
+  out.forEach(function (t) { t.uhrzeit = uhr; t.ort = ort; });
+  return out;
+}
+
 // Node-Tests
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { FP_GRENZEN: FP_GRENZEN, fpNormKennzeichen: fpNormKennzeichen, fpKennzeichenAnzeige: fpKennzeichenAnzeige, fpNormName: fpNormName, fpNamenGleich: fpNamenGleich, fpPlausiblerStand: fpPlausiblerStand, fpKmPruefen: fpKmPruefen, fpLueckePruefen: fpLueckePruefen, fpKmFormat: fpKmFormat, fpDatumAnzeige: fpDatumAnzeige, fpSkizzeFuerKategorie: fpSkizzeFuerKategorie, fpKategorieLabel: fpKategorieLabel };
+  module.exports = { FP_GRENZEN: FP_GRENZEN, fpNormKennzeichen: fpNormKennzeichen, fpKennzeichenAnzeige: fpKennzeichenAnzeige, fpNormName: fpNormName, fpNamenGleich: fpNamenGleich, fpPlausiblerStand: fpPlausiblerStand, fpKmPruefen: fpKmPruefen, fpLueckePruefen: fpLueckePruefen, fpKmFormat: fpKmFormat, fpDatumAnzeige: fpDatumAnzeige, fpSkizzeFuerKategorie: fpSkizzeFuerKategorie, fpKategorieLabel: fpKategorieLabel,
+    FP_TERMIN_ARTEN: FP_TERMIN_ARTEN, FP_TERMIN_ART_FUER: FP_TERMIN_ART_FUER, fpTerminArt: fpTerminArt, fpTerminPasst: fpTerminPasst, fpIsoPlusTage: fpIsoPlusTage, fpTerminSort: fpTerminSort, fpTermineImFenster: fpTermineImFenster, fpTermineAusText: fpTermineAusText };
 }
 </script>
   <script>// Fuhrpark-Apps v4 – gemeinsame Bausteine (Fahrer-App + Dispo-App). Erwartet regeln.js davor.
@@ -1070,7 +1225,7 @@ var FP = (function () {
     // Gemeinsames Backend (Apps-Script-Projekt „Fahrzeugkontrolle“)
     const APPS_SCRIPT_URL = window.FP_BACKEND_URL || "https://script.google.com/macros/s/AKfycbzqMTED8H5V2lC35eCflbXoc9_k6WtOHQtNH5JYyvNqvwINOz4oVy8fvTwvl2kFWRpo/exec";
     FP.api.url = APPS_SCRIPT_URL;
-    const APP_VERSION = "4.2";
+    const APP_VERSION = "4.3";
     const PRUEFPUNKTE = [
       "Abblendlicht", "Fernlicht", "Blinker vorne + hinten", "Bremslichter", "Rückleuchten / Kennzeichenbeleuchtung", "Scheinwerfer unbeschädigt (Glas/Gehäuse)",
       "Feststellbremse / Handbremse", "Lenkung ohne Auffälligkeiten",
@@ -1088,6 +1243,11 @@ var FP = (function () {
     const FOTO_MAX_KANTE = 1280, FOTO_QUALITAET = 0.6, INTERVALL_MONATE = 3;
     // Ab wann etwas als Hinweis erscheint
     const REGELN = { SERVICE_BALD_KM: 2000, UNTERSUCHUNG_BALD_TAGE: 14, OHNE_KONTROLLE_TAGE: 7 };
+    // Termine: Leiste oben = heute bis +3 Tage; an diesen Hinweisen kann ein Termin eingetragen werden
+    const TERMIN_TAGE = 3;
+    const TERMIN_HINWEISE = ["service", "tuev", "untersuchung", "maengel", "warn", "termin"];
+    const ART_FARBE = { "Inspektion/Service": "#2563eb", "TÜV/HU": "#0d9488", "Werkstatt": "#ea580c", "Reifen": "#475569", "Sonstiges": "#a21caf" };
+    const WOTAG = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
     const $ = (id) => document.getElementById(id);
 
     let stamm = null, info = null, dash = null;
@@ -1095,6 +1255,7 @@ var FP = (function () {
     let uebermittlungsId = null, sendeLaeuft = false;
     let ansicht = "fahrzeuge", suche = "", filter = "alle", gewaehlt = null, mitRepariert = false;
     let fahrzeuge = [], hinweise = [];
+    let termine = [], erledigteTermine = [];   // geplante (inkl. Vorschläge aus dem Fuhrpark-Tab) / erledigte der letzten 30 Tage
     const detailCache = {};
 
     $("heute").textContent = new Date().toLocaleDateString("de-DE", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
@@ -1202,15 +1363,42 @@ var FP = (function () {
         if (lk && lk.meldungen) neu(fz, { stufe: 2, icon: "⚠", art: "warn", titel: "Warnleuchte: " + lk.meldungen, text: "bei der letzten Kontrolle (" + (lk.art || "Kontrolle") + ", " + lk.name + ")", wann: lk.zeit });
         const zuletzt = (lk && lk.datum) || fp.kmDatum;
         if (zuletzt && -tageBis(zuletzt) >= REGELN.OHNE_KONTROLLE_TAGE) neu(fz, { stufe: 1, icon: "…", art: "ruhe", titel: "Seit " + -tageBis(zuletzt) + " Tagen keine Kontrolle", text: "letzte am " + lang(zuletzt) + " – steht das Fahrzeug?" });
-        if (fp.termine) neu(fz, { stufe: 1, icon: "📅", art: "termin", titel: "Anstehender Termin", text: fp.termine });
+        // „Anstehende Termine“ ohne erkennbares Datum (z. B. „Ölwechsel“) bleibt ein Info-Hinweis; mit Datum wird daraus ein Termin-Vorschlag (unten)
+        if (fp.termine && !fpTermineAusText(fp.termine, heute()).length) neu(fz, { stufe: 1, icon: "📅", art: "termin", titel: "Anstehend laut Fuhrpark-Tab", text: fp.termine });
       });
+      // Termine: Tab „Termine“ + im Fuhrpark-Tab erkannte („Anstehende Termine“, „Interne Prüfung“) als Vorschlag, solange nicht übernommen/verworfen
+      const echte = Array.isArray(dash.termine) ? dash.termine : [];
+      const verbraucht = new Set(echte.map((t) => t.schluessel).filter(Boolean));
+      termine = []; erledigteTermine = [];
+      echte.forEach((t) => { const x = Object.assign({}, t, { fz: fzFuer(t.fahrzeug) }); if (t.status === "geplant") termine.push(x); else if (t.status === "erledigt") erledigteTermine.push(x); });
+      fahrzeuge.slice().forEach((fz) => {
+        const fp = fz.f.fuhrpark;
+        if (!fp || !Array.isArray(dash.termine)) return;
+        [["termine", "Anstehende Termine"], ["notiz", "Interne Prüfung"]].forEach(([feld, spalte]) => fpTermineAusText(fp[feld], heute()).forEach((v) => {
+          const schluessel = "fuhrpark|" + fz.key + "|" + v.datum;
+          if (verbraucht.has(schluessel) || termine.some((t) => t.fz === fz && t.datum === v.datum)) return;
+          termine.push({ id: "", vorschlag: true, quelle: spalte, schluessel, fahrzeug: fz.kz, fz, datum: v.datum, uhrzeit: v.uhrzeit, art: v.art, ort: v.ort, notiz: v.text, bezug: "", status: "geplant" });
+        }));
+      });
+      termine.sort(fpTerminSort); erledigteTermine.sort(fpTerminSort);
       fahrzeuge.forEach((fz) => {
-        fz.rot = fz.hinweise.filter((h) => h.stufe === 3).length;
-        fz.gelb = fz.hinweise.filter((h) => h.stufe === 2).length;
+        fz.termine = termine.filter((t) => t.fz === fz);
+        fz.naechster = fz.termine.find((t) => t.datum >= heute()) || null;
+        fz.hinweise.forEach((h) => {
+          if (TERMIN_HINWEISE.indexOf(h.art) === -1) return;
+          const passend = fz.termine.filter((t) => fpTerminPasst(t, h.art));
+          h.termin = passend.find((t) => t.datum >= heute()) || null;
+          h.terminVorbei = h.termin ? null : passend.filter((t) => t.datum < heute()).pop() || null;
+          h.terminErledigt = h.termin || h.terminVorbei ? null : erledigteTermine.filter((t) => t.fz === fz && fpTerminPasst(t, h.art)).pop() || null;
+        });
+        // Ampel: Eingeplantes zählt nicht mehr als „dringend“/„bald“, sondern als „eingeplant“ (blau)
+        fz.rot = fz.hinweise.filter((h) => h.stufe === 3 && !h.termin).length;
+        fz.gelb = fz.hinweise.filter((h) => h.stufe === 2 && !h.termin).length;
+        fz.geplant = fz.hinweise.filter((h) => h.stufe >= 2 && h.termin).length;
         fz.offen = fz.schaeden.filter(offenOderBestaetigt).length;
         fz.suchtext = norm([fz.kz, fz.f.name, fz.f.modell, fz.f.kategorie].join(" "));
       });
-      hinweise.sort((a, b) => b.stufe - a.stufe || sortName(a.fz, b.fz));
+      hinweise.sort((a, b) => b.stufe - a.stufe || (!!a.termin - !!b.termin) || sortName(a.fz, b.fz));
       if (gewaehlt) gewaehlt = fahrzeuge.find((x) => x.key === gewaehlt.key) || null;
     }
     function sortName(a, b) { return (a.f.verliehen - b.f.verliehen) || String(a.f.name || a.kz).localeCompare(String(b.f.name || b.kz), "de", { numeric: true }); }
@@ -1221,29 +1409,30 @@ var FP = (function () {
       ansicht = a;
       document.querySelectorAll("#reiter button").forEach((x) => x.classList.toggle("an", x.dataset.ansicht === a));
       const form = a === "untersuchung";
-      $("raster").hidden = form; $("suche").hidden = form; $("panel-untersuchung").hidden = !form;
+      $("raster").hidden = form; $("suche").hidden = form; $("panel-untersuchung").hidden = !form; $("termine").hidden = form || !termineAktiv();
       if (!form && dash) zeichne();
     }
     $("suche").addEventListener("input", (e) => { suche = norm(e.target.value); if (dash) zeichne(); });
 
-    function sichtbar() { return fahrzeuge.filter((fz) => (!suche || fz.suchtext.includes(suche)) && (filter !== "zutun" || fz.rot + fz.gelb > 0)); }
+    function sichtbar() { return fahrzeuge.filter((fz) => (!suche || fz.suchtext.includes(suche)) && (filter !== "zutun" || fz.rot + fz.gelb + fz.geplant > 0)); }
 
     function zeichne() {
       const aktiv = fahrzeuge.filter((fz) => !fz.f.verliehen && !fz.f.unbekannt);
-      const rot = hinweise.filter((h) => h.stufe === 3), rotFz = new Set(rot.map((h) => h.fz)).size;
+      const rot = hinweise.filter((h) => h.stufe === 3), rotFz = new Set(rot.map((h) => h.fz)).size, rotGeplant = rot.filter((h) => h.termin).length;
       const schaeden = (dash.schaeden || []).filter(offenOderBestaetigt), neuGemeldet = schaeden.filter((s) => String(s.status).toLowerCase() === "offen").length;
       const heuteKontrolliert = aktiv.filter((fz) => fz.f.letzteKontrolle && fz.f.letzteKontrolle.datum === heute()).length;
       $("kacheln").innerHTML =
         '<button type="button" class="kachel" data-k="alle"><small>Fahrzeuge</small><strong>' + aktiv.length + "</strong> <span>im Einsatz" + (fahrzeuge.length - aktiv.length ? " · " + fahrzeuge.filter((fz) => fz.f.verliehen).length + " verliehen" : "") + "</span></button>" +
-        '<button type="button" class="kachel' + (rot.length ? " alarm" : "") + '" data-k="dringend"><small>Dringend</small><strong>' + rot.length + "</strong> <span>bei " + rotFz + " Fahrzeug" + (rotFz === 1 ? "" : "en") + "</span></button>" +
+        '<button type="button" class="kachel' + (rot.length > rotGeplant ? " alarm" : "") + '" data-k="dringend"><small>Dringend</small><strong>' + rot.length + "</strong> <span>bei " + rotFz + " Fahrzeug" + (rotFz === 1 ? "" : "en") + (rotGeplant ? " · " + rotGeplant + " eingeplant" : "") + "</span></button>" +
         '<button type="button" class="kachel" data-k="schaeden"><small>Offene Schäden</small><strong>' + schaeden.length + "</strong> <span>" + (neuGemeldet ? "davon " + neuGemeldet + " neu gemeldet" : "alle eingeordnet") + "</span></button>" +
         '<button type="button" class="kachel" data-k="heute"><small>Heute kontrolliert</small><strong>' + heuteKontrolliert + "</strong> <span>von " + aktiv.length + " Fahrzeugen</span></button>";
       $("kacheln").querySelectorAll("[data-k]").forEach((k) => k.addEventListener("click", () => {
         if (k.dataset.k === "dringend" || k.dataset.k === "schaeden") wechsleAnsicht("hinweise"); else { filter = "alle"; wechsleAnsicht("fahrzeuge"); }
       }));
-      const zuTun = hinweise.filter((h) => h.stufe >= 2).length;
+      const zuTun = hinweise.filter((h) => h.stufe >= 2 && !h.termin).length;
       $("z-hinweise").textContent = zuTun; $("z-hinweise").classList.toggle("null", !zuTun);
       if (ansicht === "untersuchung") return;
+      termineLeiste();
       if (ansicht === "hinweise") linksHinweise(); else linksFahrzeuge();
       rechts();
       $("stand").textContent = "Stand " + new Date(dash.stand).toLocaleString("de-DE");
@@ -1257,9 +1446,10 @@ var FP = (function () {
       const html = TYP_GRUPPEN.map(([k, titel]) => {
         const g = l.filter((fz) => typGruppe(fz) === k).sort(sortName);
         if (!g.length) return "";
-        const rot = g.filter((fz) => fz.rot).length, gelb = g.filter((fz) => !fz.rot && fz.gelb).length;
+        const rot = g.filter((fz) => fz.rot).length, gelb = g.filter((fz) => !fz.rot && fz.gelb).length, geplant = g.filter((fz) => !fz.rot && !fz.gelb && fz.geplant).length;
+        const teile = [rot ? "<b>" + rot + " dringend</b>" : "", gelb ? gelb + " bald" : "", geplant ? '<i class="geplant">' + geplant + " eingeplant</i>" : ""].filter(Boolean);
         return '<div class="gruppe typ"><i style="background:' + (KAT_FARBE[k] || "#94a3b8") + '"></i>' + FP.esc(titel) + " · " + g.length +
-          "<small>" + (rot ? "<b>" + rot + " dringend</b>" : "") + (rot && gelb ? " · " : "") + (gelb ? gelb + " bald" : "") + (!rot && !gelb ? "alles ok" : "") + "</small></div>" + g.map(fzZeile).join("");
+          "<small>" + (teile.length ? teile.join(" · ") : "alles ok") + "</small></div>" + g.map(fzZeile).join("");
       }).join("");
       $("links").innerHTML = '<div class="liste-kopf"><h2>Fahrzeuge<small>' + l.length + " · nach Typ</small></h2>" +
         '<div class="filter"><button type="button" data-f="alle"' + (filter === "alle" ? ' class="an"' : "") + '>Alle</button><button type="button" data-f="zutun"' + (filter === "zutun" ? ' class="an"' : "") + ">Mit Handlungsbedarf</button></div></div>" +
@@ -1273,17 +1463,19 @@ var FP = (function () {
       const pills = (km ? '<span class="pill">' + fpKmFormat(km) + " km</span>" : "") + (fp.tuev ? '<span class="pill' + tKlasse + '">TÜV ' + FP.esc(fp.tuev) + "</span>" : "") +
         (fz.offen ? '<span class="pill orange">' + fz.offen + (fz.offen === 1 ? " Schaden" : " Schäden") + "</span>" : "") +
         (lk ? '<span class="pill' + (lk.datum === heute() ? " gruen" : "") + '">Kontrolle ' + (lk.datum === heute() ? "heute" : kurz(lk.datum)) + "</span>" : "") +
+        (fz.naechster ? '<span class="pill termin">📅 ' + FP.esc(terminWann(fz.naechster)) + "</span>" : fz.termine && fz.termine.length ? '<span class="pill vorbei">📅 war ' + kurz(fz.termine[fz.termine.length - 1].datum) + "</span>" : "") +
         (f.verliehen ? '<span class="pill">verliehen</span>' : "") + (f.unbekannt ? '<span class="pill gelb">nicht in der Fahrzeugliste</span>' : "");
       const ampel = fz.rot ? '<span class="ampel s3">' + fz.rot + "</span><small>dringend</small>" : fz.gelb ? '<span class="ampel s2">' + fz.gelb + "</span><small>bald</small>" :
+        fz.geplant ? '<span class="ampel geplant">📅</span><small>eingeplant</small>' :
         f.verliehen ? '<span class="ampel aus">–</span><small>verliehen</small>' : '<span class="ampel s0">✓</span><small>alles ok</small>';
       return '<div class="zeile' + (gewaehlt === fz ? " an" : "") + (f.verliehen ? " verliehen" : "") + '" data-key="' + FP.esc(fz.key) + '">' + fzAva(f) +
         '<div><div class="name">' + FP.esc(f.kennzeichen) + (f.name ? " <span>· " + FP.esc(f.name) + (f.modell ? " · " + FP.esc(f.modell) : "") + "</span>" : "") + '</div><div class="meta">' + pills + "</div></div>" +
         '<div class="ampel-box">' + ampel + "</div></div>";
     }
     function hinweisZeile(h, mitFahrzeug, mitAktionen) {
-      return '<div class="hinweis s' + h.stufe + (mitFahrzeug && gewaehlt === h.fz ? " an" : "") + '" data-key="' + FP.esc(h.fz.key) + '"' + (h.schaden ? ' data-id="' + FP.esc(h.schaden.id) + '" data-fahrzeug="' + FP.esc(h.schaden.fahrzeug) + '"' : h.auff ? ' data-auff-id="' + FP.esc(h.auff.id) + '"' : "") + ">" +
+      return '<div class="hinweis s' + h.stufe + (h.termin ? " geplant" : "") + (mitFahrzeug && gewaehlt === h.fz ? " an" : "") + '" data-key="' + FP.esc(h.fz.key) + '"' + (h.schaden ? ' data-id="' + FP.esc(h.schaden.id) + '" data-fahrzeug="' + FP.esc(h.schaden.fahrzeug) + '"' : h.auff ? ' data-auff-id="' + FP.esc(h.auff.id) + '"' : "") + ">" +
         '<span class="i">' + FP.esc(h.icon) + "</span><div>" + (mitFahrzeug ? "<b>" + FP.esc(titelVon(h.fz.f)) + "</b> – " : "") + "<b>" + FP.esc(h.titel) + "</b>" +
-        '<div class="t">' + FP.esc(h.text) + (h.wann ? ' <span class="wann">· ' + FP.esc(h.wann) + "</span>" : "") + "</div>" + (mitAktionen ? aktionenFuer(h) : "") + "</div></div>";
+        '<div class="t">' + FP.esc(h.text) + (h.wann ? ' <span class="wann">· ' + FP.esc(h.wann) + "</span>" : "") + "</div>" + terminStatus(h) + (mitAktionen ? aktionenFuer(h) : "") + "</div></div>";
     }
     function linksHinweise() {
       const l = hinweise.filter((h) => !suche || h.fz.suchtext.includes(suche));
@@ -1309,12 +1501,16 @@ var FP = (function () {
       let html = '<div class="detail-kopf">' + fzAva(f) + "<div><strong>" + FP.esc(titelVon(f)) + '</strong><div class="unter">' + FP.esc([f.modell, f.kategorie, f.standort ? "Standort " + f.standort : ""].filter(Boolean).join(" · ")) +
         (f.verliehen ? ' <span class="pill">verliehen</span>' : "") + "</div></div>" +
         '<div class="gross">' + (km ? fpKmFormat(km) + " km" : "–") + "<small>km-Stand" + (kmDatum ? " · " + lang(kmDatum) : "") + "</small></div></div>";
-      if (!f.unbekannt) html += '<div class="detail-knoepfe"><button type="button" class="btn primary" data-start-u>Untersuchung starten</button>' + (lk ? "" : "") + "</div>";
+      if (!f.unbekannt) html += '<div class="detail-knoepfe"><button type="button" class="btn primary" data-start-u>Untersuchung starten</button>' +
+        (termineAktiv() ? '<button type="button" class="btn termin" data-termin-neu="" data-fz-key="' + FP.esc(fz.key) + '">📅 Termin eintragen</button>' : "") + "</div>";
 
       // Zu erledigen
       const offen = fz.hinweise.slice().sort((a, b) => b.stufe - a.stufe);
       html += '<div class="abschnitt-kopf">Zu erledigen ' + (offen.length ? '<span class="zahl' + (fz.rot ? "" : " null") + '">' + offen.length + "</span>" : "") + "</div>";
       html += offen.length ? offen.map((h) => hinweisZeile(h, false, true)).join("") : '<div class="box ok alles-ok">✓ Nichts offen – alles erledigt.</div>';
+
+      // Termine des Fahrzeugs (geplant, auch vorbei und noch nicht abgehakt, und Vorschläge aus dem Fuhrpark-Tab)
+      if (fz.termine && fz.termine.length) html += '<div class="abschnitt-kopf">Termine <small>' + fz.termine.length + "</small></div><div class=\"termin-liste\">" + fz.termine.map((t) => terminZeile(t, fz)).join("") + "</div>";
 
       // Fahrzeugdaten
       if (f.fuhrpark) {
@@ -1380,8 +1576,8 @@ var FP = (function () {
     function aktionenFuer(h) {
       if (h.art === "auff") return '<div class="btn-row"><button type="button" class="btn klein ok" data-auff="geklärt">✓ Geklärt</button><button type="button" class="btn klein" data-auff="Fehlalarm">Fehlalarm</button><button type="button" class="btn klein" data-auff="">Mit Kommentar …</button></div>';
       if (h.art === "schaden") return '<div class="btn-row">' + schadenKnoepfe(h.schaden) + "</div>";
-      if (h.art === "untersuchung" || h.art === "maengel") return '<div class="btn-row"><button type="button" class="btn klein primary" data-start-u>Untersuchung starten</button></div>';
-      return "";
+      const k = (h.art === "untersuchung" || h.art === "maengel" ? '<button type="button" class="btn klein primary" data-start-u>Untersuchung starten</button>' : "") + terminKnoepfe(h);
+      return k ? '<div class="btn-row">' + k + "</div>" : "";
     }
     // Zustand steht als Chip dran (nicht repariert / repariert); Knöpfe sind eindeutig Aktionen
     function schadenKnoepfe(s) {
@@ -1400,6 +1596,7 @@ var FP = (function () {
         (schadenKnoepfe(s) ? '<div class="btn-row">' + schadenKnoepfe(s) + "</div>" : "") + "</div></div>";
     }
     function verdrahteAktionen(container) {
+      verdrahteTermine(container);
       container.querySelectorAll("[data-auff]").forEach((b) => b.addEventListener("click", (ev) => {
         ev.stopPropagation();
         const id = b.closest("[data-auff-id]").dataset.auffId, vorgabe = b.dataset.auff;
@@ -1445,6 +1642,152 @@ var FP = (function () {
     async function schadenAktion(id, aktion, extra) {
       await dispoAktion(Object.assign({ typ: "schaden", id, aktion }, extra), "Gespeichert ✓");
       if ($("fahrzeug").value) ladeAbgleich(); // Skizze der Untersuchung nachziehen
+    }
+
+    // ====== TERMINE ======
+    function termineAktiv() { return !!(dash && Array.isArray(dash.termine)); }   // altes Backend (vor 4.3) liefert keine Termine
+    function wotag(iso) { return WOTAG[alsDatum(iso).getDay()]; }
+    function tagName(iso) { const d = tageBis(iso); return d === 0 ? "Heute" : d === 1 ? "Morgen" : d === -1 ? "Gestern" : wotag(iso); }
+    // "heute · 13:00", "morgen", "Do 22.10. · 09:00"
+    function terminWann(t) { const d = tageBis(t.datum); return (d === 0 ? "heute" : d === 1 ? "morgen" : wotag(t.datum) + " " + kurz(t.datum)) + (t.uhrzeit ? " · " + t.uhrzeit : ""); }
+    function terminKey(t) { return t.id || t.schluessel; }
+    function terminVon(key) { return termine.concat(erledigteTermine).find((t) => terminKey(t) === key) || null; }
+    function artDot(art) { return '<i class="art-dot" style="background:' + (ART_FARBE[art] || "#94a3b8") + '"></i>'; }
+    function hinweisFuerBezug(fz, bezug) { return bezug ? fz.hinweise.find((h) => h.art === bezug) || null : null; }
+
+    // Status-Zeile am Hinweis: eingeplant (blau) · vorbei, noch nicht abgehakt (orange) · erledigt (grün)
+    function terminStatus(h) {
+      const t = h.termin || h.terminVorbei || h.terminErledigt;
+      if (!t) return "";
+      const wo = (t.ort ? " · " + FP.esc(t.ort) : "") + (t.art && !t.ort ? " · " + FP.esc(t.art) : "");
+      if (h.termin) return '<div class="t-status' + (t.vorschlag ? " vorschlag" : "") + '"><span class="chip-t">📅 ' + (t.vorschlag ? "Termin erkannt" : "eingeplant") + "</span>Termin " + FP.esc(terminWann(t)) + wo +
+        (t.vorschlag ? ' <span class="leise">· aus „' + FP.esc(t.quelle) + "“: " + FP.esc(t.notiz) + "</span>" : "") + "</div>";
+      if (h.terminVorbei) return '<div class="t-status vorbei"><span class="chip-t">Termin vorbei</span>war ' + FP.esc(terminWann(t)) + wo + " – erledigt?</div>";
+      return '<div class="t-status erledigt"><span class="chip-t">✓ Termin erledigt</span>' + kurz(t.datum) + wo + ' <span class="leise">· Fuhrpark-Tab noch nicht aktualisiert</span></div>';
+    }
+    function terminKnoepfe(h) {
+      if (!termineAktiv() || TERMIN_HINWEISE.indexOf(h.art) === -1 || h.fz.f.unbekannt) return "";
+      const neuK = (label, klasse) => '<button type="button" class="btn klein ' + klasse + '" data-termin-neu="' + FP.esc(h.art) + '" data-fz-key="' + FP.esc(h.fz.key) + '">' + label + "</button>";
+      if (h.termin) return h.termin.vorschlag ? '<button type="button" class="btn klein termin" data-termin="' + FP.esc(terminKey(h.termin)) + '">📅 Termin übernehmen …</button>'
+        : '<button type="button" class="btn klein termin-hell" data-termin="' + FP.esc(terminKey(h.termin)) + '">Termin ändern</button>' + (h.termin.datum <= heute() ? '<button type="button" class="btn klein ok" data-termin-erledigt="' + FP.esc(terminKey(h.termin)) + '">✓ Termin erledigt</button>' : "");
+      if (h.terminVorbei) return '<button type="button" class="btn klein ok" data-termin-erledigt="' + FP.esc(terminKey(h.terminVorbei)) + '">✓ Termin erledigt</button><button type="button" class="btn klein termin-hell" data-termin="' + FP.esc(terminKey(h.terminVorbei)) + '">Neues Datum …</button>';
+      return neuK(h.terminErledigt ? "📅 Neuer Termin" : "📅 Termin eintragen", "termin");
+    }
+    // Zeile im Abschnitt „Termine“ des Fahrzeugs
+    function terminZeile(t, fz) {
+      const vorbei = t.datum < heute(), h = hinweisFuerBezug(fz, t.bezug);
+      const meta = [t.notiz && !t.vorschlag ? FP.esc(t.notiz) : "", h ? "für: " + FP.esc(h.titel) : "", t.vorschlag ? "erkannt im Fuhrpark-Tab („" + FP.esc(t.quelle) + "“): " + FP.esc(t.notiz) : t.von ? "eingetragen von " + FP.esc(t.von) : ""].filter(Boolean).join(" · ");
+      const k = terminKey(t);
+      const knoepfe = t.vorschlag ? '<button type="button" class="btn klein termin" data-termin="' + FP.esc(k) + '">Übernehmen …</button>'
+        : '<button type="button" class="btn klein" data-termin="' + FP.esc(k) + '">Ändern</button>' + (t.datum <= heute() ? '<button type="button" class="btn klein ok" data-termin-erledigt="' + FP.esc(k) + '">✓ Erledigt</button>' : "");
+      return '<div class="termin-zeile' + (t.vorschlag ? " vorschlag" : vorbei ? " vorbei" : "") + '"><div class="datum-block"><small>' + tagName(t.datum) + "</small><strong>" + kurz(t.datum) + "</strong><span>" + (t.uhrzeit || "–") + "</span></div>" +
+        '<div><div class="was">' + artDot(t.art) + FP.esc(t.art) + (vorbei ? ' <span class="pill vorbei">vorbei – erledigt?</span>' : "") + (t.vorschlag ? ' <span class="pill termin">Vorschlag</span>' : "") + "</div>" +
+        (t.ort ? '<div class="wo">📍 ' + FP.esc(t.ort) + "</div>" : "") + (meta ? '<div class="meta-text">' + meta + "</div>" : "") + "</div>" +
+        '<div class="btn-row">' + knoepfe + "</div></div>";
+    }
+    // Leiste oben: Termine heute bis +3 Tage, je Tag eine Spalte
+    function termineLeiste() {
+      const el = $("termine");
+      if (!termineAktiv() || ansicht === "untersuchung") { el.hidden = true; return; }
+      el.hidden = false;
+      const tage = Array.from({ length: TERMIN_TAGE + 1 }, (_, n) => fpIsoPlusTage(heute(), n));
+      const imFenster = fpTermineImFenster(termine, heute(), TERMIN_TAGE);
+      const vorbei = termine.filter((t) => t.datum < heute());
+      let html = '<div class="termine-kopf"><h2><span class="ico">📅</span>Termine nächste Tage<small>' + imFenster.length + " · heute bis " + wotag(tage[TERMIN_TAGE]) + " " + kurz(tage[TERMIN_TAGE]) + "</small></h2>" +
+        '<div class="rechts">' + (vorbei.length ? '<button type="button" class="pill vorbei" data-key="' + FP.esc(vorbei[0].fz.key) + '">⚠ ' + vorbei.length + (vorbei.length === 1 ? " Termin vorbei" : " Termine vorbei") + ", nicht abgehakt</button>" : "") +
+        '<button type="button" class="btn termin" data-termin-neu="">＋ Termin eintragen</button></div></div>';
+      html += imFenster.length ? '<div class="tage">' + tage.map((iso) => {
+        const l = imFenster.filter((t) => t.datum === iso);
+        return '<div class="tagspalte' + (iso === heute() ? " heute" : "") + '"><div class="tag-kopf">' + tagName(iso) + " <small>" + (tageBis(iso) <= 1 ? wotag(iso) + " " : "") + kurz(iso) + "</small>" + (l.length ? '<span class="zahl">' + l.length + "</span>" : "") + "</div>" +
+          (l.length ? l.map(terminKarte).join("") : '<div class="tag-leer">frei</div>') + "</div>";
+      }).join("") + "</div>" : '<div class="leer-klein">Keine Termine bis ' + wotag(tage[TERMIN_TAGE]) + " " + kurz(tage[TERMIN_TAGE]) + ". Termine trägst du am Fahrzeug oder direkt am Hinweis ein.</div>";
+      el.innerHTML = html;
+      el.querySelectorAll("[data-key]").forEach((z) => z.addEventListener("click", () => {
+        gewaehlt = fahrzeuge.find((x) => x.key === z.dataset.key) || null; zeichne();
+        if (innerWidth < 820) $("rechts").scrollIntoView({ behavior: "smooth" }); else $("rechts").scrollTop = 0;
+      }));
+      verdrahteTermine(el);
+    }
+    function terminKarte(t) {
+      const f = t.fz.f;
+      return '<div class="t-karte' + (t.vorschlag ? " vorschlag" : "") + (gewaehlt === t.fz ? " an" : "") + '" data-key="' + FP.esc(t.fz.key) + '" title="' + FP.esc([t.art, t.ort, t.notiz].filter(Boolean).join(" · ")) + '">' + fzAva(f) +
+        '<div style="min-width:0"><div class="t-zeit">' + (t.uhrzeit || "ohne Zeit") + " <span>· " + FP.esc(f.name || t.fahrzeug) + "</span></div>" +
+        '<div class="t-was">' + artDot(t.art) + FP.esc(t.art) + "</div>" +
+        '<div class="t-wo">' + FP.esc(t.ort || (t.vorschlag ? "erkannt im Fuhrpark-Tab – bitte übernehmen" : t.notiz) || f.kennzeichen) + "</div></div></div>";
+    }
+    function verdrahteTermine(container) {
+      container.querySelectorAll("[data-termin-neu]").forEach((b) => b.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const fz = b.dataset.fzKey ? fahrzeuge.find((x) => x.key === b.dataset.fzKey) : null;
+        terminDialog({ fz, hinweis: fz && b.dataset.terminNeu ? fz.hinweise.find((h) => h.art === b.dataset.terminNeu) : null });
+      }));
+      container.querySelectorAll("[data-termin]").forEach((b) => b.addEventListener("click", (ev) => { ev.stopPropagation(); const t = terminVon(b.dataset.termin); if (t) terminDialog({ termin: t }); }));
+      container.querySelectorAll("[data-termin-erledigt]").forEach((b) => b.addEventListener("click", (ev) => { ev.stopPropagation(); const t = terminVon(b.dataset.terminErledigt); if (t) terminErledigt(t); }));
+    }
+    function terminBody(t, extra) {   // Vorschlag aus dem Fuhrpark-Tab: Daten + Schlüssel mitschicken (es gibt noch keine Zeile)
+      return Object.assign({ typ: "termin" }, t && t.vorschlag ? { fahrzeug: t.fahrzeug, datum: t.datum, uhrzeit: t.uhrzeit, art: t.art, ort: t.ort, notiz: t.notiz, bezug: "", schluessel: t.schluessel } : { id: t ? t.id : "" }, extra);
+    }
+    function terminErledigt(t) {
+      if (!nameNoetig()) return;
+      const nach = t.art === "Inspektion/Service" ? " – bitte „Nächster Service bei KM“ im Fuhrpark-Tab nachtragen" : t.art === "TÜV/HU" ? " – bitte den neuen TÜV-Monat im Fuhrpark-Tab nachtragen" : "";
+      dispoAktion(terminBody(t, { op: "erledigt" }), "Termin erledigt ✓" + nach);
+    }
+
+    // Formular: Termin eintragen / ändern / übernehmen (Vorschlag) / löschen
+    function terminDialog(o) {
+      if (!nameNoetig()) return;
+      const t = o.termin || null, vorschlag = !!(t && t.vorschlag), aendern = !!(t && !vorschlag);
+      const fz = o.fz || (t && t.fz) || null;
+      const h = o.hinweis || (t && fz ? hinweisFuerBezug(fz, t.bezug) : null);
+      const st = { art: t ? t.art : h ? (FP_TERMIN_ART_FUER[h.art] || fpTerminArt(h.text)) : "Inspektion/Service" };
+      const notizVorgabe = t ? t.notiz : h && h.art === "termin" ? h.text : h && h.art === "untersuchung" ? "Interne Untersuchung" : "";
+      const orte = Array.from(new Set(termine.concat(erledigteTermine).map((x) => x.ort).filter(Boolean))).sort();
+      const fzListe = fahrzeuge.filter((x) => !x.f.unbekannt && !x.f.verliehen).sort(sortName);
+      const schnell = [[0, "Heute"], [1, "Morgen"], [2, "Übermorgen"], [7, "In 1 Woche"]];
+      const felder =
+        (h ? '<div class="fuer-box">Für: <b>' + FP.esc(h.titel) + "</b>" + (h.text ? " · " + FP.esc(h.text) : "") + "</div>" : "") +
+        (vorschlag ? '<div class="fuer-box vorschlag">Erkannt im Fuhrpark-Tab („' + FP.esc(t.quelle) + "“): <b>" + FP.esc(t.notiz) + "</b><br>Bitte prüfen und speichern – dann steht er fest im Tab „Termine“.</div>" : "") +
+        (fz ? "" : '<label class="feld-label" for="tFz">Fahrzeug</label><select id="tFz"><option value="">– Fahrzeug wählen –</option>' +
+          fzListe.map((x) => '<option value="' + FP.esc(x.key) + '"' + (gewaehlt === x ? " selected" : "") + ">" + FP.esc(titelVon(x.f)) + "</option>").join("") + "</select>") +
+        '<span class="feld-label">Art</span><div class="art-wahl">' + FP_TERMIN_ARTEN.map((a) => '<button type="button" data-art="' + FP.esc(a) + '"' + (a === st.art ? ' class="an"' : "") + ">" + artDot(a) + FP.esc(a.replace("/", " / ")) + "</button>").join("") + "</div>" +
+        '<div class="row"><div><label class="feld-label" for="tDatum">Datum</label><input type="date" id="tDatum" value="' + FP.esc(t ? t.datum : "") + '" /></div>' +
+        '<div><label class="feld-label" for="tZeit">Uhrzeit <span>(optional)</span></label><input type="time" id="tZeit" value="' + FP.esc(t ? t.uhrzeit : "") + '" /></div></div>' +
+        '<div class="schnell">' + schnell.map(([n, l]) => '<button type="button" data-plus="' + n + '">' + l + "</button>").join("") + "</div>" +
+        '<label class="feld-label" for="tOrt">Werkstatt / Ort</label><input type="text" id="tOrt" list="tOrte" maxlength="120" placeholder="z. B. Autohaus Schmitz, Euskirchen" value="' + FP.esc(t ? t.ort : "") + '" />' +
+        '<datalist id="tOrte">' + orte.map((x) => '<option value="' + FP.esc(x) + '">').join("") + "</datalist>" +
+        '<label class="feld-label" for="tNotiz">Notiz <span>(optional)</span></label><input type="text" id="tNotiz" maxlength="300" placeholder="z. B. Ölwechsel + Bremsen, Fahrer bringt ihn um 8 hin" value="' + FP.esc(notizVorgabe) + '" />' +
+        '<p class="t-fehler" id="tFehler"></p>';
+      const aktionen = [{ label: aendern ? "Änderung speichern" : "Termin speichern", wert: "speichern", klasse: "termin" }];
+      if (aendern) aktionen.push({ label: "Termin löschen", wert: "loeschen", klasse: "danger" });
+      if (vorschlag) aktionen.push({ label: "Kein Termin – Vorschlag verwerfen", wert: "loeschen", klasse: "danger" });
+      FP.menue((aendern ? "Termin ändern" : "Termin eintragen") + (fz ? " – " + titelVon(fz.f) : ""), "", aktionen, felder, (wert, m) => {
+        if (wert === "speichern") {
+          const fehler = m.querySelector("#tFehler");
+          const ziel = fz || fahrzeuge.find((x) => x.key === (m.querySelector("#tFz") || {}).value);
+          const datum = m.querySelector("#tDatum").value, zeit = m.querySelector("#tZeit").value;
+          if (!ziel) { fehler.textContent = "Bitte ein Fahrzeug wählen."; m.querySelector("#tFz").focus(); return false; }
+          if (!datum) { fehler.textContent = "Bitte das Datum eintragen."; m.querySelector("#tDatum").focus(); return false; }
+          if (datum < heute() && !aendern) { fehler.textContent = "Das Datum liegt in der Vergangenheit."; m.querySelector("#tDatum").focus(); return false; }
+          const body = { typ: "termin", op: aendern ? "aendern" : "neu", id: aendern ? t.id : "", fahrzeug: ziel.kz, datum, uhrzeit: zeit, art: st.art,
+            ort: m.querySelector("#tOrt").value.trim(), notiz: m.querySelector("#tNotiz").value.trim(), schluessel: vorschlag ? t.schluessel : "" };
+          if (!aendern) body.bezug = h ? h.art : "";
+          gewaehlt = ziel;
+          dispoAktion(body, (aendern ? "Termin geändert ✓ " : "Termin eingetragen ✓ ") + titelVon(ziel.f) + " · " + terminWann({ datum, uhrzeit: zeit }));
+        } else if (wert === "loeschen") {
+          if (vorschlag) return void dispoAktion(terminBody(t, { op: "loeschen" }), "Vorschlag verworfen");
+          // Rückfrage im selben Menü-Fenster: erst nach dem Schließen öffnen
+          setTimeout(() => FP.menue("Termin löschen?", FP.esc(titelVon(fz.f)) + " · " + FP.esc(t.art) + " · " + FP.esc(terminWann(t)) + (t.ort ? " · " + FP.esc(t.ort) : ""),
+            [{ label: "Ja, Termin löschen", wert: "ja", klasse: "danger" }], "", (w) => { if (w === "ja") dispoAktion(terminBody(t, { op: "loeschen" }), "Termin gelöscht"); }), 0);
+        }
+      });
+      const m = document.querySelector("#menueOverlay .menue");
+      m.classList.add("termin-menue");
+      m.querySelectorAll(".art-wahl button").forEach((b) => b.addEventListener("click", () => { st.art = b.dataset.art; m.querySelectorAll(".art-wahl button").forEach((x) => x.classList.toggle("an", x === b)); }));
+      const datumFeld = m.querySelector("#tDatum");
+      const markiere = () => m.querySelectorAll(".schnell button").forEach((b) => b.classList.toggle("an", datumFeld.value === fpIsoPlusTage(heute(), +b.dataset.plus)));
+      m.querySelectorAll(".schnell button").forEach((b) => b.addEventListener("click", () => { datumFeld.value = fpIsoPlusTage(heute(), +b.dataset.plus); markiere(); m.querySelector("#tFehler").textContent = ""; }));
+      datumFeld.addEventListener("input", markiere); markiere();
+      if (innerWidth >= 820) setTimeout(() => { const sel = m.querySelector("#tFz"); if (sel && !sel.value) sel.focus(); else if (!datumFeld.value) datumFeld.focus(); }, 50);
     }
 
     // ====== UNTERSUCHUNG ======
