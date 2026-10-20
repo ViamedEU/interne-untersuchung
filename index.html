@@ -361,23 +361,32 @@ select#ergebnis.e-rot { border-color: var(--rot); background-color: var(--rot-he
     .termine-kopf h2 small { color: var(--leise); font-weight: 600; font-size: 0.78rem; }
     .termine-kopf .rechts { margin-left: auto; display: flex; gap: 0.45rem; align-items: center; flex-wrap: wrap; }
     .termine-kopf .pill { cursor: pointer; border: none; font-size: 0.76rem; padding: 0.35rem 0.7rem; }
-    .tage { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--linie); }
-    .tagspalte { padding: 0.6rem 0.7rem 0.8rem; border-left: 1px solid var(--linie); min-width: 0; }
-    .tagspalte:first-child { border-left: none; }
-    .tagspalte.heute { background: linear-gradient(180deg, var(--termin-hell), #fff 70%); }
-    .tag-kopf { display: flex; align-items: baseline; gap: 0.4rem; font-weight: 800; color: var(--tinte); font-size: 0.88rem; }
-    .tag-kopf small { color: var(--leise); font-weight: 700; font-size: 0.74rem; }
-    .tag-kopf .zahl { margin-left: auto; background: var(--termin); align-self: center; }
-    .tagspalte.heute .tag-kopf { color: var(--termin-text); }
-    .tag-leer { color: #a3b1a8; font-size: 0.8rem; font-weight: 600; padding: 0.55rem 0 0.1rem; }
-    .t-karte { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 0.55rem; align-items: center; background: var(--termin-hell); border-radius: 14px; padding: 0.5rem 0.6rem; margin-top: 0.45rem; cursor: pointer; border: 2px solid transparent; }
-    .t-karte:hover, .t-karte.an { border-color: var(--termin-2); }
-    .t-karte.vorschlag { background: #fff; border: 2px dashed #93c5fd; }
-    .t-karte .fz-ava { width: 38px; height: 38px; border-radius: 11px; font-size: 0.5rem; } .t-karte .fz-ava b { font-size: 0.86rem; }
-    .t-zeit { font-weight: 900; color: var(--termin-text); font-size: 0.86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    /* Kalender: diese + nächste Woche, je Woche eine Zeile Mo–So */
+    .kalender { border-top: 1px solid var(--linie); }
+    .woche { display: grid; grid-template-columns: 40px repeat(5, minmax(0, 1fr)) repeat(2, minmax(0, 0.7fr)); }   /* Sa/So etwas schmaler */
+    .woche + .woche { border-top: 1px solid var(--linie); }
+    .kw { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem; background: #f6f8f7; color: var(--leise); font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+    .kw b { font-size: 0.92rem; color: var(--tinte); letter-spacing: 0; }
+    .tag { border-left: 1px solid var(--linie); padding: 0.4rem 0.4rem 0.5rem; min-width: 0; min-height: 96px; }
+    .tag.we { background: #fafbfa; }
+    .tag.vorbei { background: #f6f7f7; }
+    .tag.heute { background: var(--termin-hell); box-shadow: inset 0 3px 0 var(--termin); }
+    .tag-kopf { display: flex; align-items: center; gap: 0.3rem; font-weight: 800; color: var(--tinte); font-size: 0.78rem; min-height: 18px; }
+    .tag-kopf small { color: var(--leise); font-weight: 700; font-size: 0.7rem; }
+    .tag.vorbei .tag-kopf, .tag.vorbei .tag-kopf small { color: #a3b1a8; }
+    .tag.heute .tag-kopf { color: var(--termin-text); }
+    .tag-kopf .zahl { margin-left: auto; background: var(--termin); min-width: 17px; height: 17px; padding: 0 5px; font-size: 0.64rem; }
+    .t-karte { background: #fff; border: 1px solid #d6e2fb; border-left: 4px solid var(--f, var(--termin)); border-radius: 8px; padding: 0.25rem 0.4rem; margin-top: 0.3rem; cursor: pointer; line-height: 1.25; box-shadow: 0 1px 2px rgba(15,23,42,0.05); }
+    .t-karte:hover, .t-karte.an { border-color: var(--termin-2); border-left-color: var(--f, var(--termin)); box-shadow: 0 0 0 1px var(--termin-2); }
+    .t-karte.vorschlag { border-style: dashed; border-color: #93c5fd; border-left: 4px solid var(--f, var(--termin)); }
+    .t-karte.vorbei { background: var(--orange-hell); border-color: #fdc9a4; border-left-color: var(--f, var(--termin)); }
+    .t-karte.erledigt { background: var(--akzent-hell); border-color: #bfe3b8; border-left-color: var(--f, var(--termin)); opacity: 0.75; }
+    .t-zeit { font-weight: 900; color: var(--termin-text); font-size: 0.74rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .t-karte.vorbei .t-zeit { color: var(--orange); } .t-karte.erledigt .t-zeit { color: var(--akzent-text); }
     .t-zeit span { color: var(--tinte); font-weight: 800; }
-    .t-was { font-weight: 700; color: var(--text); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .t-wo { color: var(--leise); font-size: 0.76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .t-was { font-weight: 700; color: var(--text); font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .t-wo { color: var(--leise); font-size: 0.66rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .t-was .art-dot { width: 7px; height: 7px; margin-right: 0.25rem; }
     .art-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; vertical-align: 1px; }
     .pill.termin { background: var(--termin-hell); color: var(--termin-text); } .pill.vorbei { background: var(--orange-hell); color: var(--orange); }
     .ampel.geplant { background: linear-gradient(135deg, var(--termin), var(--termin-2)); font-size: 0.95rem; }
@@ -421,8 +430,15 @@ select#ergebnis.e-rot { border-color: var(--rot); background-color: var(--rot-he
     .fuer-box { background: var(--termin-hell); color: var(--termin-text); border-radius: 12px; padding: 0.55rem 0.75rem; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.75rem; line-height: 1.4; }
     .fuer-box.vorschlag { background: #fff; border: 1.5px dashed #93c5fd; }
     .t-fehler { color: var(--rot); font-weight: 700; font-size: 0.86rem; min-height: 1.1em; margin: -0.2rem 0 0.5rem; }
-    @media (max-width: 820px) { .tage { grid-template-columns: 1fr 1fr; } .tagspalte:nth-child(3) { border-left: none; } .tagspalte:nth-child(n+3) { border-top: 1px solid var(--linie); } }
-    @media (max-width: 560px) { .tage { grid-template-columns: 1fr; } .tagspalte { border-left: none; border-top: 1px solid var(--linie); } .tagspalte:first-child { border-top: none; } .tag-leer { padding-top: 0.25rem; } }
+    /* schmal (Handy): je Woche eine Liste, nur Tage mit Terminen + heute */
+    @media (max-width: 760px) {
+      .woche { grid-template-columns: 1fr; }
+      .kw { flex-direction: row; justify-content: flex-start; gap: 0.35rem; padding: 0.35rem 0.9rem; }
+      .tag { border-left: none; border-top: 1px solid var(--linie); min-height: 0; display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 0.5rem; padding: 0.45rem 0.9rem; }
+      .tag.leer:not(.heute) { display: none; }
+      .tag-kopf { align-items: flex-start; flex-wrap: wrap; } .tag-kopf .zahl { display: none; }
+      .tag .t-karte:first-child { margin-top: 0; }
+    }
 
     /* Untersuchung (Formular) */
     .formular { max-width: 760px; margin: 0 auto; }
@@ -1243,8 +1259,8 @@ var FP = (function () {
     const FOTO_MAX_KANTE = 1280, FOTO_QUALITAET = 0.6, INTERVALL_MONATE = 3;
     // Ab wann etwas als Hinweis erscheint
     const REGELN = { SERVICE_BALD_KM: 2000, UNTERSUCHUNG_BALD_TAGE: 14, OHNE_KONTROLLE_TAGE: 7 };
-    // Termine: Leiste oben = heute bis +3 Tage; an diesen Hinweisen kann ein Termin eingetragen werden
-    const TERMIN_TAGE = 3;
+    // Termine: Kalender oben = diese + nächste Woche (Mo–So); an diesen Hinweisen kann ein Termin eingetragen werden
+    const TERMIN_WOCHEN = 2;
     const TERMIN_HINWEISE = ["service", "tuev", "untersuchung", "maengel", "warn", "termin"];
     const ART_FARBE = { "Inspektion/Service": "#2563eb", "TÜV/HU": "#0d9488", "Werkstatt": "#ea580c", "Reifen": "#475569", "Sonstiges": "#a21caf" };
     const WOTAG = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
@@ -1286,10 +1302,10 @@ var FP = (function () {
     function tuevEnde(t) { const m = /^(\d{2})\/(\d{2})$/.exec(String(t || "")); if (!m) return ""; const d = new Date(2000 + +m[2], +m[1], 0, 12); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
     const KAT_FARBE = { BTW: "#2e9a3e", BUS: "#0284c7", LMW: "#7c3aed", TSW: "#ea580c" };
     function katVon(f) { const k = String(f.kategorie || f.name || "").toUpperCase().split(/[\s–-]/)[0]; return KAT_FARBE[k] ? k : (/^(BTW|BUS|LMW|TSW)/.exec(String(f.name || "").toUpperCase()) || [""])[0]; }
+    function fzFarbe(f) { return f.verliehen || f.unbekannt ? "#94a3b8" : (KAT_FARBE[katVon(f)] || "#0d9488"); }
     function fzAva(f) {
       const k = katVon(f), nr = (/(\d+)\s*$/.exec(String(f.name || "")) || [])[1];
-      const farbe = f.verliehen || f.unbekannt ? "#94a3b8" : (KAT_FARBE[k] || "#0d9488");
-      return '<div class="fz-ava" style="background:' + farbe + '">' + FP.esc(k || "FZG") + (nr ? "<b>" + FP.esc(nr) + "</b>" : "") + "</div>";
+      return '<div class="fz-ava" style="background:' + fzFarbe(f) + '">' + FP.esc(k || "FZG") + (nr ? "<b>" + FP.esc(nr) + "</b>" : "") + "</div>";
     }
     function kmVon(f) { const fp = f.fuhrpark || {}; return fp.km || (f.letzteKontrolle && f.letzteKontrolle.km) || null; }
     function titelVon(f) { return (f.name ? f.name + " · " : "") + f.kennzeichen; }
@@ -1685,22 +1701,32 @@ var FP = (function () {
         (t.ort ? '<div class="wo">📍 ' + FP.esc(t.ort) + "</div>" : "") + (meta ? '<div class="meta-text">' + meta + "</div>" : "") + "</div>" +
         '<div class="btn-row">' + knoepfe + "</div></div>";
     }
-    // Leiste oben: Termine heute bis +3 Tage, je Tag eine Spalte
+    function montagVon(iso) { return fpIsoPlusTage(iso, -((alsDatum(iso).getDay() + 6) % 7)); }
+    function kwVon(iso) {   // ISO-Kalenderwoche (Woche mit dem Donnerstag)
+      const d = alsDatum(fpIsoPlusTage(iso, 3 - (alsDatum(iso).getDay() + 6) % 7)), j = alsDatum(d.getFullYear() + "-01-04");
+      return 1 + Math.round(((d - j) / 864e5 - 3 + (j.getDay() + 6) % 7) / 7);
+    }
+    // Kalender oben: diese + nächste Woche, je Woche eine Zeile Mo–So (vergangene Tage dieser Woche blass, mit Erledigtem)
     function termineLeiste() {
       const el = $("termine");
       if (!termineAktiv() || ansicht === "untersuchung") { el.hidden = true; return; }
       el.hidden = false;
-      const tage = Array.from({ length: TERMIN_TAGE + 1 }, (_, n) => fpIsoPlusTage(heute(), n));
-      const imFenster = fpTermineImFenster(termine, heute(), TERMIN_TAGE);
+      const start = montagVon(heute()), ende = fpIsoPlusTage(start, TERMIN_WOCHEN * 7 - 1);
+      const imFenster = termine.concat(erledigteTermine).filter((t) => t.datum >= start && t.datum <= ende).sort(fpTerminSort);
+      const anstehend = imFenster.filter((t) => t.status === "geplant" && t.datum >= heute()).length;
       const vorbei = termine.filter((t) => t.datum < heute());
-      let html = '<div class="termine-kopf"><h2><span class="ico">📅</span>Termine nächste Tage<small>' + imFenster.length + " · heute bis " + wotag(tage[TERMIN_TAGE]) + " " + kurz(tage[TERMIN_TAGE]) + "</small></h2>" +
+      let html = '<div class="termine-kopf"><h2><span class="ico">📅</span>Termine<small>diese &amp; nächste Woche · ' + anstehend + " anstehend</small></h2>" +
         '<div class="rechts">' + (vorbei.length ? '<button type="button" class="pill vorbei" data-key="' + FP.esc(vorbei[0].fz.key) + '">⚠ ' + vorbei.length + (vorbei.length === 1 ? " Termin vorbei" : " Termine vorbei") + ", nicht abgehakt</button>" : "") +
         '<button type="button" class="btn termin" data-termin-neu="">＋ Termin eintragen</button></div></div>';
-      html += imFenster.length ? '<div class="tage">' + tage.map((iso) => {
-        const l = imFenster.filter((t) => t.datum === iso);
-        return '<div class="tagspalte' + (iso === heute() ? " heute" : "") + '"><div class="tag-kopf">' + tagName(iso) + " <small>" + (tageBis(iso) <= 1 ? wotag(iso) + " " : "") + kurz(iso) + "</small>" + (l.length ? '<span class="zahl">' + l.length + "</span>" : "") + "</div>" +
-          (l.length ? l.map(terminKarte).join("") : '<div class="tag-leer">frei</div>') + "</div>";
-      }).join("") + "</div>" : '<div class="leer-klein">Keine Termine bis ' + wotag(tage[TERMIN_TAGE]) + " " + kurz(tage[TERMIN_TAGE]) + ". Termine trägst du am Fahrzeug oder direkt am Hinweis ein.</div>";
+      html += '<div class="kalender">' + Array.from({ length: TERMIN_WOCHEN }, (_, w) => {
+        const mo = fpIsoPlusTage(start, w * 7);
+        return '<div class="woche"><div class="kw">KW <b>' + kwVon(mo) + "</b></div>" + Array.from({ length: 7 }, (_, n) => {
+          const iso = fpIsoPlusTage(mo, n), l = imFenster.filter((t) => t.datum === iso);
+          const klasse = (iso === heute() ? " heute" : iso < heute() ? " vorbei" : "") + (n >= 5 ? " we" : "") + (l.length ? "" : " leer");
+          return '<div class="tag' + klasse + '"><div class="tag-kopf">' + (iso === heute() ? "Heute" : wotag(iso)) + " <small>" + kurz(iso) + "</small>" + (l.length ? '<span class="zahl">' + l.length + "</span>" : "") + "</div>" +
+            "<div>" + l.map(terminKarte).join("") + "</div></div>";
+        }).join("") + "</div>";
+      }).join("") + "</div>";
       el.innerHTML = html;
       el.querySelectorAll("[data-key]").forEach((z) => z.addEventListener("click", () => {
         gewaehlt = fahrzeuge.find((x) => x.key === z.dataset.key) || null; zeichne();
@@ -1709,11 +1735,13 @@ var FP = (function () {
       verdrahteTermine(el);
     }
     function terminKarte(t) {
-      const f = t.fz.f;
-      return '<div class="t-karte' + (t.vorschlag ? " vorschlag" : "") + (gewaehlt === t.fz ? " an" : "") + '" data-key="' + FP.esc(t.fz.key) + '" title="' + FP.esc([t.art, t.ort, t.notiz].filter(Boolean).join(" · ")) + '">' + fzAva(f) +
-        '<div style="min-width:0"><div class="t-zeit">' + (t.uhrzeit || "ohne Zeit") + " <span>· " + FP.esc(f.name || t.fahrzeug) + "</span></div>" +
+      const f = t.fz.f, erledigt = t.status === "erledigt";
+      const klasse = t.vorschlag ? " vorschlag" : erledigt ? " erledigt" : t.datum < heute() ? " vorbei" : "";
+      const titel = [f.kennzeichen, t.art, t.ort, t.notiz, erledigt ? "erledigt" : t.datum < heute() ? "vorbei – noch nicht abgehakt" : ""].filter(Boolean).join(" · ");
+      return '<div class="t-karte' + klasse + (gewaehlt === t.fz ? " an" : "") + '" style="--f:' + fzFarbe(f) + '" data-key="' + FP.esc(t.fz.key) + '" title="' + FP.esc(titel) + '">' +
+        '<div class="t-zeit">' + (erledigt ? "✓ " : "") + (t.uhrzeit || "ohne Zeit") + " <span>" + FP.esc(f.name || t.fahrzeug) + "</span></div>" +
         '<div class="t-was">' + artDot(t.art) + FP.esc(t.art) + "</div>" +
-        '<div class="t-wo">' + FP.esc(t.ort || (t.vorschlag ? "erkannt im Fuhrpark-Tab – bitte übernehmen" : t.notiz) || f.kennzeichen) + "</div></div></div>";
+        '<div class="t-wo">' + FP.esc(t.ort || (t.vorschlag ? "Vorschlag – bitte übernehmen" : t.notiz) || f.kennzeichen) + "</div></div>";
     }
     function verdrahteTermine(container) {
       container.querySelectorAll("[data-termin-neu]").forEach((b) => b.addEventListener("click", (ev) => {
